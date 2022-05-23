@@ -1,0 +1,191 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Furkan KILICASLAN</title>
+<style>
+body {
+    color: #000000;
+    background: #EEEEEE;
+    font: 1.1em "Times New Roman";
+    line-height: 1.2;
+    margin: 40px 0;
+}
+#resume {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 40px 60px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 2px 2px 4px #AAAAAA;
+    -webkit-box-shadow: 2px 2px 4px #AAAAAA;
+}
+h1 {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 200%;
+    margin: 0;
+    padding: 0;
+}
+h2 {
+    border-bottom: 1px solid #000000;
+    text-transform: uppercase;
+    font-size: 130%;
+    margin: 1em 0 0 0;
+    padding: 0;
+}
+h3 {
+    font-size: 100%;
+    margin: 0.8em 0 0.3em 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+p {
+    margin: 0 0 0.5em 0;
+    padding: 0;
+    }
+ul {
+    padding: 0;
+    margin: 0 1.5em;
+    }
+/* ul immediately after h1 = contact list */
+h1 + ul {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    }
+h1 + ul > li {
+    display: inline;
+    white-space: pre;
+    list-style-type: none;
+}
+h1 + ul > li:after {
+    content: "  \2022  ";
+}
+h1 + ul > li:last-child:after {
+    content: "";
+}
+/* p immediately after contact list = summary */
+h1 + ul + p {
+    margin: 1em 0;
+}
+@media print {
+    body {
+        font-size: 10pt;
+        margin: 0;
+        padding: 0;
+        background: none;
+    }
+    #resume {
+        margin: 0;
+        padding: 0;
+        border: 0px;
+        background: none;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+    /* Make links black in PDF */
+    /* Move this outside the print block to apply this in HTML too */
+    a, a:link, a:visited, a:hover {
+        color: #000000;
+        text-decoration: underline;
+    }
+}
+@page {
+    /* Change margins and paper size of PDF */
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/@page */
+    size: letter;
+    margin: 0.5in 0.8in;
+}
+@media screen and (max-width: 800px) {
+    body {
+        font-size: 16pt;
+        margin: 0;
+        padding: 0;
+        background: #FFFFFF !important;
+    }
+    #resume {
+        margin: 0;
+        padding: 1em;
+        border: 0px;
+        background: none;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+}
+
+</style>
+</head>
+<body>
+<div id="resume">
+<!-- The (first) h1 will be used as the <title> of the HTML page -->
+<h1>Furkan KILICASLAN</h1>
+<!-- The unordered list immediately after the h1 will be formatted on a single
+line. It is intended to be used for contact details -->
+<ul>
+<li><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#102;&#117;&#114;&#107;&#97;&#110;&#46;&#107;&#105;&#108;&#105;&#99;&#97;&#115;&#108;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">&#102;&#117;&#114;&#107;&#97;&#110;&#46;&#107;&#105;&#108;&#105;&#99;&#97;&#115;&#108;&#97;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</a></li>
+<li><a href="https://klcsln.com">klcsln.com</a></li>
+<li><a href="https://www.linkedin.com/in/klcsln/">linkedin.com/in/klcsln</a></li>
+<li>Ankara, TR</li>
+</ul>
+<!-- The paragraph after the h1 and ul and before the first h2 is optional. It
+is intended to be used for a short summary. -->
+<p>Software Engineer experienced in gameplay, engine and audio programming along with system, level and technical design</p>
+<h2>Experience</h2>
+<!-- You have to wrap the "left" and "right" half of these headings in spans by
+hand -->
+<h3><span>Software Engineer, Taleworlds Entertainment</span> <span>Feb 2022 &ndash; Present</span></h3>
+<ul>
+<li>Developing gameplay features and systems in C# and C++ for <a href="https://store.steampowered.com/app/261550/Mount__Blade_II_Bannerlord/">Mount and Blade II: Bannerlord</a>.</li>
+<li>Fixing bugs and crashes from live and internal reports.</li>
+<li>Iterating on ideas collaborating with design, engine, UI and art teams.</li>
+<li>Maintaining existing systems, refactoring and participating in code reviews using Plastic SCM and JIRA</li>
+</ul>
+<h3><span>Audio Software Engineering Intern, Treyarch</span> <span>May 2021 &ndash; Aug 2021</span></h3>
+<ul>
+<li>Extended core sound engine features for Call of Duty engine in C++ focusing on vehicle sound systems.</li>
+<li>Programmed new features for internal development tools and worked on various bugfixes.</li>
+<li>Designed and developed a multiplayer game mode using a proprietary scripting language.</li>
+</ul>
+<h3><span>Software Engineering Intern, Taleworlds Entertainment</span> <span>Jun 2020 &ndash; Aug 2020</span></h3>
+<ul>
+<li>Developed gameplay features, modules, systems and tools for Mount &amp; Blade II: Bannerlord.</li>
+<li>Automated xml formatting for the design team.</li>
+<li>Designed and implemented the first performance benchmark scene prototype currently used in the game.</li>
+</ul>
+<h2>Education</h2>
+<h3><span>University of Southern California, M.S. Computer Science</span> <span>2019 &ndash; 2021</span></h3>
+<ul>
+<li>Fulbright Master’s Scholar, 1 out of ~70 scholars from the Fulbright Turkey cohort of 2019</li>
+</ul>
+<h3><span>Bahcesehir University, B.E. Computer Engineering, B.S. Genetics &amp; Bioinformatics</span> <span>2014 &ndash; 2019</span></h3>
+<ul>
+<li>Erasmus+ participant at University of Hertfordshire, UK (2017) &amp; Berlin Technical University, DE (2018)</li>
+</ul>
+<h2>Projects</h2>
+<h3><span><a href="https://benhaderle.itch.io/snowshoe-thompson">The Trials of Snowshoe Thompson</a></span> <span> 2020 - 2021</span></h3>
+<ul>
+<li>Managed the audio production pipeline from sound design to gameplay implementations.</li>
+<li>Programmed all SFX, Music and Mixer implementations in Unity with C#.</li>
+<li>Created and strived to ensure the right vision for game audio needs, in communication with other team leads.</li>
+</ul>
+<h3><span><a href="https://store.steampowered.com/app/1382200/Liquidators/">Liquidators</a> (+95% Positive Reviews on Steam)</span> <span> 2019 - 2020</span></h3>
+<ul>
+<li>Led level design for the USC Film School Thesis Project, Liquidators.</li>
+<li>Designed and tested levels, from prototyping and blocking out to level dressing and prop placements.</li>
+<li>Mentored teammates on level design and Unreal Engine 4 workflows.</li>
+</ul>
+<h2>Coursework</h2>
+<ul>
+<li><strong>Game Engine Development:</strong> Developed frustum culling, gameplay features and an audio engine with 3D spatial audio and digital signal processing capabilities using FMOD C++ API for a 3D game engine</li>
+<li><strong>Mobile Social Games:</strong> Designed and programmed a medieval themed endless runner game in Unity leading a team of four engineers and two product managers, mixing elements of town building with endless runner games</li>
+<li><strong>Game Development with CryEngine:</strong> Designed an island-themed game level using CryEngine and it&rsquo;s visual scripting tool, FlowGraph.</li>
+</ul>
+<h2>Additional Information</h2>
+<ul>
+<li><strong>About Me:</strong> Got my bicycle crushed by a tank, backpacked alone through Spain, Visited Chernobyl Nuclear Power Plant, Played over 5000 hours of video games</li>
+<li><strong>Technical Skills:</strong> C++, C#, Python, Javascript, Lua, Bash, Console Development, Unreal Engine, Unity, FMOD, Blender, Substance, Git, Perforce, Plastic SCM, 3D Math, JIRA, Agile, Visual Studio, React, Node.js</li>
+<li><strong>Languages:</strong> Turkish (Native), English (Fluent), German (Basic), Spanish (Basic), Polish (Basic)</li>
+</ul></div>
+</body>
+</html>
