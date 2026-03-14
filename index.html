@@ -1,349 +1,758 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furkan Kılıçaslan — Gameplay Programmer</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230d0d0b'/><text x='16' y='23' text-anchor='middle' font-family='Syne,sans-serif' font-weight='700' font-size='19' fill='%23c8b882'>K</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inconsolata:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <title>Klcsln</title>
+    :root {
+      --bg: #0d0d0b;
+      --bg-2: #141412;
+      --bg-3: #1c1c19;
+      --text: #e8e5dc;
+      --text-muted: #a8a49a;
+      --text-dim: #706d68;
+      --accent: #c8b882;
+      --accent-warm: #d4956a;
+      --border: rgba(200,184,130,0.12);
+      --border-strong: rgba(200,184,130,0.25);
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'Inconsolata', monospace;
+      --font-body: 'Lora', Georgia, serif;
+    }
 
-  <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    html { scroll-behavior: smooth; }
 
-  <!-- Custom fonts for this template -->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-    rel="stylesheet">
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
 
-  <!-- Custom styles for this template -->
-  <link href="css/grayscale.min.css" rel="stylesheet">
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.6;
+    }
 
+    /* ── LAYOUT ── */
+    .site {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 3rem 2.5rem;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .sidebar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to top, var(--bg), transparent);
+      pointer-events: none;
+    }
+
+    .name {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+    }
+
+    .name span {
+      color: var(--accent);
+    }
+
+    .title-line {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      flex: 1;
+    }
+
+    nav a {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    nav a::before {
+      content: '—';
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--accent);
+    }
+
+    nav a:hover::before, nav a.active::before {
+      color: var(--accent);
+    }
+
+    .sidebar-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: auto;
+      padding-top: 2rem;
+    }
+
+    .sidebar-links a {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-links a:hover { color: var(--text-muted); }
+
+    .sidebar-links a svg {
+      width: 11px;
+      height: 11px;
+      fill: currentColor;
+      opacity: 0.7;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      padding: 3rem 4rem 6rem 4rem;
+    }
+
+    section {
+      max-width: 680px;
+      margin-bottom: 5rem;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    section:nth-child(1) { animation-delay: 0.05s; }
+    section:nth-child(2) { animation-delay: 0.15s; }
+    section:nth-child(3) { animation-delay: 0.25s; }
+    section:nth-child(4) { animation-delay: 0.35s; }
+    section:nth-child(5) { animation-delay: 0.45s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 40px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+
+    /* ── HERO ── */
+    .hero-greeting {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-greeting em {
+      font-family: var(--font-display);
+      font-style: normal;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .hero-body {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.8;
+      max-width: 540px;
+    }
+
+    .hero-body a {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--border-strong);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+    }
+
+    .hero-body a:hover {
+      text-decoration-color: var(--accent);
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.65rem 1.25rem;
+      border: 1px solid var(--border-strong);
+      color: var(--text-muted);
+      background: transparent;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(200,184,130,0.04);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0d0d0b;
+    }
+
+    .btn-primary:hover {
+      background: #d4ca9a;
+      border-color: #d4ca9a;
+      color: #0d0d0b;
+    }
+
+    /* ── PROJECTS ── */
+    .project {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project:last-child {
+      border-bottom: none;
+    }
+
+    .project-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: color 0.2s;
+    }
+
+    .project-title:hover { color: var(--accent); }
+
+    .project-tag {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(200,184,130,0.08);
+      padding: 0.2rem 0.6rem;
+      border: 1px solid rgba(200,184,130,0.2);
+    }
+
+    .project-role {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .project-body {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.75;
+    }
+
+    .project-body a {
+      color: var(--text-muted);
+      text-decoration: underline;
+      text-decoration-color: var(--border);
+      text-underline-offset: 3px;
+      transition: color 0.2s, text-decoration-color 0.2s;
+      font-style: italic;
+    }
+
+    .project-body a:hover {
+      color: var(--text);
+      text-decoration-color: var(--accent);
+    }
+
+    /* ── WRITING ── */
+    .writing-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .writing-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      transition: padding-left 0.2s;
+    }
+
+    .writing-item:first-child { border-top: 1px solid var(--border); }
+
+    .writing-item:hover {
+      padding-left: 0.5rem;
+    }
+
+    .writing-item:hover .writing-title { color: var(--accent); }
+
+    .writing-title {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-style: italic;
+      transition: color 0.2s;
+      flex: 1;
+    }
+
+    .writing-arrow {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+
+    .writing-item:hover .writing-arrow { color: var(--accent); }
+
+    /* ── ABOUT / CONTACT ── */
+    .about-text {
+      color: var(--text-muted);
+      line-height: 1.85;
+    }
+
+    .about-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .contact-item {
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+      background: var(--bg-2);
+      transition: border-color 0.2s;
+    }
+
+    .contact-item:hover { border-color: var(--border-strong); }
+
+    .contact-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .contact-label svg {
+      width: 11px;
+      height: 11px;
+      fill: currentColor;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    .contact-label .lucide {
+      width: 12px;
+      height: 12px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    .sidebar-links a .lucide {
+      width: 11px;
+      height: 11px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    .contact-value {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .contact-value a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-value a:hover { color: var(--accent); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 32px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.3;
+      margin: 2rem 0;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 800px) {
+      .site {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        padding: 2rem 1.5rem 1.5rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .sidebar::after { display: none; }
+
+      nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.25rem 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      nav a::before { display: none; }
+
+      .sidebar-links {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.5rem;
+        padding-top: 1rem;
+        margin-top: 0;
+      }
+
+      .main {
+        padding: 2rem 1.5rem 4rem;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); }
+  </style>
 </head>
+<body>
+  <div class="site">
 
-<body id="page-top">
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+      <p class="name">Furkan <span>K.</span></p>
+      <p class="title-line">Gameplay Programmer</p>
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-    <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="#page-top">Klcsln</a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-        data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-        aria-label="Toggle navigation">
-        Menu
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#about">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#projects">Projects</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#art">Art</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#contact-section">Contact</a>
-          </li>
-        </ul>
+      <nav id="site-nav">
+        <a href="#intro">Introduction</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="sidebar-links">
+        <a href="https://klcsln.com/docs/resume.pdf" target="_blank" rel="noopener">
+          <svg class="lucide" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+          Resume
+        </a>
       </div>
-    </div>
-  </nav>
+    </aside>
 
-  <!-- Header -->
-  <header class="masthead">
-    <div class="container d-flex h-100 align-items-center">
-      <div class="mx-auto text-center">
-        <h1 class="mx-auto my-0 text-uppercase" style="color: #990000;">KLCSLN</h1>
-        <h2 class="text-white mx-auto mt-2 mb-5">I'm Furkan. I make video games and I love impactful digital experiences!</h2>
-        <h2 class="text-white mx-auto mt-2 mb-5"> </h2>
-      </div>
-    </div>
-  </header>
+    <!-- ── MAIN ── -->
+    <main class="main">
 
-  <!-- About Section -->
-  <section id="about" class="about-section text-center">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-          <h2 class="text-black mb-4">About me</h2>
-          <p class="text-black">I'm a Gameplay Programmer at <a href="https://ioi.dk/" target="_blank" style="text-decoration: underline; color: #990000;">IO Interactive</a> 
-            holding a Master's degree in Computer Science from <a href="https://www.usc.edu/" target="_blank" style="text-decoration: underline; color: #990000;">University of Southern California</a> 
-            as a Fulbright Scholar. I also hold Bachelor's degrees in Genetics & Bioinformatics as well as Computer Engineering. You can check my <a href="docs/resume.pdf" target="_blank" style="text-decoration: underline; color: #990000;">resume</a> 
-            and my sample <a href="https://github.com/Klcsln/Code-Samples" target="_blank" style="text-decoration: underline; color: #990000;">code</a> repository. 
-            Send me an <a href="mailto: furkankilicaslan@gmail.com" style="text-decoration: underline; color: #990000;">email</a> if you're interested in learning more abut me. 
-            You can also check out my <a href="https://klcsln.hashnode.dev/" target="_blank" style="text-decoration: underline; color: #990000;">blog</a> here!
+      <!-- INTRO -->
+      <section id="intro">
+        <h1 class="hero-greeting">
+          Hello, I'm <em>Furkan.</em>
+        </h1>
+        <p class="hero-body">
+          I'm a gameplay programmer at <a href="https://ioi.dk/" target="_blank" rel="noopener">IO Interactive</a>, working on
+          <a href="https://store.steampowered.com/agecheck/app/3768760/" target="_blank" rel="noopener">007: First Light</a> — responsible for developing our gameplay camera systems as part of the 3Cs team.
+          Before that I shipped <a href="https://store.steampowered.com/app/261550/Mount__Blade_II_Bannerlord/" target="_blank" rel="noopener">Mount &amp; Blade II: Bannerlord</a> at TaleWorlds Entertainment and interned at Treyarch on
+          <a href="https://store.steampowered.com/app/1985810/Call_of_Duty_Black_Ops_Cold_War/" target="_blank" rel="noopener">Call of Duty: Black Ops Cold War</a>.
+        </p>
+        <p class="hero-body" style="margin-top:1rem;">
+          I hold a Master's in Computer Science from <a href="https://www.usc.edu/" target="_blank" rel="noopener">USC</a> as a
+          Fulbright Scholar, and dual Bachelor's degrees in Genetics &amp; Bioinformatics and Computer Engineering
+          from Bahçeşehir University.
+        </p>
+        <div class="hero-links">
+          <a href="https://klcsln.com/docs/resume.pdf" class="btn btn-primary" target="_blank" rel="noopener">
+            View Resume ↗
+          </a>
+          <a href="mailto:furkankilicaslan@gmail.com" class="btn">
+            Get in Touch
+          </a>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects">
+        <p class="section-label">Work</p>
+
+        <div class="project">
+          <div class="project-meta">
+            <a href="https://store.steampowered.com/agecheck/app/3768760/" class="project-title" target="_blank" rel="noopener">007: First Light</a>
+            <span class="project-tag">AAA · Current</span>
+          </div>
+          <div class="project-role">Gameplay Programmer — IO Interactive</div>
+          <div class="divider"></div>
+          <p class="project-body">
+            Owning all gameplay camera systems and their interactions for this upcoming AAA title — spanning systemic camera movements, ranged and melee combat cameras, cover assists, transition systems, and a data-oriented framework. Working closely with game design, cinematic arts, and other tech teams to ensure cameras feel right across every gameplay context, while maintaining performance targets through ongoing optimization work.
           </p>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Projects Section -->
-  <section id="projects" class="projects-section">
-    <div class="container">
-
-      <div class="row justify-content-center no-gutters">
-        <div class="col-lg-6">
-          <iframe width="555px" height="367px" src="https://www.youtube.com/embed/m4rU_TTn7EE" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+        <div class="project">
+          <div class="project-meta">
+            <a href="https://store.steampowered.com/app/261550/Mount__Blade_II_Bannerlord/" class="project-title" target="_blank" rel="noopener">Mount &amp; Blade II: Bannerlord</a>
+            <span class="project-tag">AAA</span>
+          </div>
+          <div class="project-role">Software Engineer, Gameplay — TaleWorlds Entertainment</div>
+          <div class="divider"></div>
+          <p class="project-body">
+            Spent a year and a half developing and shipping gameplay systems across a large, complex codebase — implementing new quests, the perk system, and modding support improvements alongside ongoing bug and crash fixing. Worked closely with design, UI, and engine teams, contributing to integration test coverage and codebase stability.
+          </p>
         </div>
-        <div class="col-lg-6 order-lg-first">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-center text-lg-right">
-                <h4 class="text-white">Project 007</h4>
-                <h5 class="text-white">Gameplay Programmer</h5>
-                <p class="mb-0 text-white">As part of the 3Cs team I'm mainly responsible from developing our gameplay camera systems. I'm collaborating with my peers to ensure a high quality of standard implementing features, fixing bugs and crashes and improving stability in our proprietary data oriented gameplay framework. I'm working closely with designers and producers to ensure our milestone goals are reached with the quality expected from a AAA game.
-                </p>
-                <hr class="d-none d-lg-block mb-0 mr-0">
-              </div>
-            </div>
+
+        <div class="project">
+          <div class="project-meta">
+            <a href="https://store.steampowered.com/app/1985810/Call_of_Duty_Black_Ops_Cold_War/" class="project-title" target="_blank" rel="noopener">Call of Duty: Black Ops Cold War</a>
+            <span class="project-tag">AAA · Intern</span>
+          </div>
+          <div class="project-role">Audio Software Engineering Intern — Treyarch</div>
+          <div class="divider"></div>
+          <p class="project-body">
+            Extended sound engine features for the Call of Duty engine in C++, focusing on vehicle audio systems.
+            Developed features for internal tools, resolved bugs, and designed a multiplayer game mode pitched
+            to the team using a proprietary scripting language.
+          </p>
+        </div>
+
+        <div class="project">
+          <div class="project-meta">
+            <a href="https://store.steampowered.com/app/1382200/Liquidators/" class="project-title" target="_blank" rel="noopener">Liquidators</a>
+            <span class="project-tag">Indie · 96% Positive</span>
+          </div>
+          <div class="project-role">Lead Level Designer — USC Film School Thesis Project</div>
+          <div class="divider"></div>
+          <p class="project-body">
+            Led level design for this Unreal Engine 4 title — working alongside the creative director, game designers,
+            and artists on level construction and set dressing. Available free on Steam.
+          </p>
+        </div>
+
+        <div class="project">
+          <div class="project-meta">
+            <a href="https://benhaderle.itch.io/snowshoe-thompson" class="project-title" target="_blank" rel="noopener">The Trials of Snowshoe Thompson</a>
+            <span class="project-tag">Indie</span>
+          </div>
+          <div class="project-role">Sound Design Lead &amp; Audio Programmer</div>
+          <div class="divider"></div>
+          <p class="project-body">
+            Managed the full audio production pipeline — from sound design through gameplay implementation.
+            Programmed all SFX, music, and mixer systems in Unity with C#. Available free on itch.io.
+          </p>
+        </div>
+      </section>
+
+
+
+      <!-- CONTACT -->
+      <section id="contact">
+        <p class="section-label">Contact</p>
+        <p class="about-text">
+          Currently based in <strong>Istanbul, TR</strong> — working full-time at IO Interactive.
+          Open to conversations about interesting technical problems.
+        </p>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <p class="contact-label">
+              <svg class="lucide" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              Email
+            </p>
+            <p class="contact-value">
+              <a href="mailto:furkankilicaslan@gmail.com">furkankilicaslan@gmail.com</a>
+            </p>
+          </div>
+          <div class="contact-item">
+            <p class="contact-label">
+              <svg class="lucide" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+              Resume
+            </p>
+            <p class="contact-value">
+              <a href="https://klcsln.com/docs/resume.pdf" target="_blank" rel="noopener">klcsln.com/docs/resume.pdf</a>
+            </p>
+          </div>
+          <div class="contact-item">
+            <p class="contact-label">
+              <svg class="lucide" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn
+            </p>
+            <p class="contact-value">
+              <a href="https://www.linkedin.com/in/klcsln/" target="_blank" rel="noopener">linkedin.com/in/klcsln</a>
+            </p>
+          </div>
+          <div class="contact-item">
+            <p class="contact-label">
+              <svg class="lucide" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+              GitHub
+            </p>
+            <p class="contact-value">
+              <a href="https://github.com/Klcsln" target="_blank" rel="noopener">github.com/Klcsln</a>
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
-        <div class="col-lg-6">
-          <iframe width="555px" height="367px" src="https://www.youtube.com/embed/q6oH5cW7PaA" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-        </div>
-        <div class="col-lg-6">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-center text-lg-left">
-                <h4 class="text-white">Mount and Blade II: Bannerlord</h4>
-                <h5 class="text-white">Software Engineer, Gameplay</h5>
-                  <p class="mb-0 text-white">I'm developing and maintaining various gameplay features and systems within the Bannerlord project. I'm constantly working with the design, UI and engine teams to iterate on ideas, develop better systems, improve stability and resolve bugs. I'm also doing code reviews, refactors and test development to improve our codebase.<br>
-                    <a href="https://store.steampowered.com/app/261550/Mount__Blade_II_Bannerlord/" style="color: white; text-decoration: underline;" target="_blank">Click here to check out the game on steam.</a>
-                  </p>
-                  <hr class="d-none d-lg-block mb-0 ml-0">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <footer style="max-width:680px; padding: 2rem 0 1rem; border-top: 1px solid var(--border); margin-top: 1rem;">
+        <p style="font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);">
+          March 2026
+        </p>
+      </footer>
 
-      <div class="row justify-content-center no-gutters">
-        <div class="col-lg-6">
-          <iframe width="555px" height="367px" src="https://www.youtube.com/embed/aTS9n_m7TW0" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-        </div>
-        <div class="col-lg-6 order-lg-first">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-center text-lg-right">
-                <h4 class="text-white">Call of Duty Black Ops Cold War</h4>
-                <h5 class="text-white">Audio Software Engineering Intern</h5>
-                <p class="mb-0 text-white">I was part of the core audio team at Treyarch, extending our sound engine features for Call of Duty engine in C++ focusing on vehicle sound systems. I also programmed and tested new features for internal development tools as well as resolving various bugs. In addition, I designed, developed and pitched a multiplayer game mode to the team using a proprietary scripting language.<br>
-                  <a href="https://store.steampowered.com/app/1985810/Call_of_Duty_Black_Ops_Cold_War/" style="color: white; text-decoration: underline;" target="_blank">Click here to check out the game on steam.</a>
-                </p>
-                <hr class="d-none d-lg-block mb-0 mr-0">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    </main>
+  </div>
 
-      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
-        <div class="col-lg-6">
-          <iframe width="555px" height="367px" src="https://www.youtube.com/embed/7YJbbS_pnxs" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-        </div>
-        <div class="col-lg-6">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-center text-lg-left">
-                <h4 class="text-white">Liquidators (%96 Positive Reviews on Steam!)</h4>
-                <h5 class="text-white">Lead Level Designer</h5>
-                <p class="mb-0 text-white">I led level design for the USC Film School Thesis Project, Liquidators. I designed levels and worked on set dressing in collaboration with our creative director, game designers and artists. I also worked on resolving technical challenges within Unreal Engine 4.<br>
-                  <a href="https://store.steampowered.com/app/1382200/Liquidators/" style="color: white; text-decoration: underline;" target="_blank">Click here to download the game on steam for free</a>
-                </p>
-                <hr class="d-none d-lg-block mb-0 ml-0">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <script>
+    const nav = document.getElementById('site-nav');
+    const links = nav.querySelectorAll('a');
+    const sections = Array.from(document.querySelectorAll('section[id]'));
 
-      <div class="row justify-content-center no-gutters">
-        <div class="col-lg-6">
-          <iframe width="555px" height="367px" src="https://www.youtube.com/embed/T0cBEVFZ3j0" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-        </div>
-        <div class="col-lg-6 order-lg-first">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-center text-lg-right">
-                <h4 class="text-white">The Trials of Snowshoe Thompson</h4>
-                <h5 class="text-white">Sound Design Lead, Audio Programmer</h5>
-                <p class="mb-0 text-white">I managed the audio production pipeline from sound design to gameplay implementations, programming all SFX, music and mixer implementations in Unity with C#. 
-                  I was in charge of creating and ensuring the right vision for our game audio needs, communicating effectively with all team members.<br>
-                  <a href="https://benhaderle.itch.io/snowshoe-thompson" style="color: white; text-decoration: underline;" target="_blank">Click here to download the game on itch.io for free</a>
-                </p>
-                <hr class="d-none d-lg-block mb-0 mr-0">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    function getOffsetTop(el) {
+      let top = 0;
+      while (el) { top += el.offsetTop; el = el.offsetParent; }
+      return top;
+    }
 
-      <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
-        <div class="col-lg-6">
-          <iframe width="555px" height="367px" src="https://www.youtube.com/embed/mSjkEZdI0rg" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-        </div>
-        <div class="col-lg-6">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-center text-lg-left">
-                <h4 class="text-white">3D Audio Engine with FMOD</h4>
-                <p class="mb-0 text-white">I built an audio engine with 3D spatial audio and digital signal processing capabilities using FMOD C++ API.<br></p>
-                <hr class="d-none d-lg-block mb-0 ml-0">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="border-top my-4"></div>
+    function setActive() {
+      const scrollY = window.scrollY + window.innerHeight * 0.25;
+      const atBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 10;
+      let current = atBottom ? sections[sections.length - 1] : sections[0];
+      if (!atBottom) {
+        for (const s of sections) {
+          if (getOffsetTop(s) <= scrollY) current = s;
+        }
+      }
+      links.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current.id);
+      });
+    }
 
-      <div class="row justify-content-center no-gutters">
-        <div class="col-lg-8 order-lg-first">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-lg">
-                <h4 class="text-white">Written Material on Various Topics</h4> <br>
-                <p>
-                  <a href="https://drive.google.com/file/d/1EG_uKUwHiMg6QunkeL0EEPHVGd6w_MjD/view?usp=sharing"
-                    style="color: white;" target="_blank">Emilia's Canvas, a Game Design Document</a>
-                </p>
-                <p>
-                  <a href="https://docs.google.com/document/d/1bJ_fEjCAky_wGVAUuL3-jwk_gSrcaZtKbUKSrK8thik/edit?usp=sharing"
-                    style="color: white;" target="_blank">Parking Slot Detection for Autonomous Vehicles from Surround
-                    Camera Image</a>
-                </p>
-                <p>
-                  <a href="https://docs.google.com/document/d/1CyMYS8sF2f16helwC7qTqnr5P7EPSOldrtmBUOS1_bE/edit?usp=sharing"
-                    style="color: white;" target="_blank">Extracting Food Characteristics from Meals based on Deep
-                    Neural Networks</a>
-                </p>
-                <p>
-                  <a href="https://drive.google.com/file/d/0B-AZJDvanbl6bFU2WE5BVHNOakk/view?usp=sharing"
-                    style="color: white;" target="_blank">Software Requirements Analysis for an Inventory Management
-                    System</a>
-                </p>
-                <p>
-                  <a href="https://github.com/Klcsln/An_Analysis_of_Python_Foundation/blob/master/An_Analysis_of_Python_Foundation.pdf"
-                    style="color: white;" target="_blank">An Analysis of Python Software Foundation: 2016-2017</a>
-                </p>
-                <p>
-                  <a href="https://github.com/Klcsln/Classical-and-Quantum-Applications-Protocols-Complexity/blob/master/Classical%20and%20Quantum%20Applications%20Protocols%20Complexity.pdf"
-                    style="color: white;" target="_blank">Classical and Quantum Applications, Protocols & Complexity</a>
-                </p>
-                <hr class="d-none d-lg-block mb-0 mr-0">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--
-      <div class="border-top my-4"></div>
-      <div id="art" class="row justify-content-center no-gutters">
-        <div class="col-lg-8 order-lg-first">
-          <div class="bg-black text-center h-100 project">
-            <div class="d-flex h-100">
-              <div class="project-text w-100 my-auto text-lg">
-                <h4 class="text-white">My Art, I know I'm probably not the next Dali :(</h4> <br>
-                <p><a href="https://www.artstation.com/klcsln" style="color: white; text-decoration: underline;" target="_blank">You can check out my artstation here and take a look at some of my artwork.</a></p>                <hr class="d-none d-lg-block mb-0 mr-0"> <br>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/HZRAfFBr7KI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> <br>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/XSD_6XH1Y6U" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> <br>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/CZ03pwgrZXA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> <br>
-              
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
--->
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section class="contact-section bg-black" id="contact-section">
-    <div class="container">
-
-      <div class="row">
-
-        <div class="col-md-4 mb-3 mb-md-0">
-          <div class="card py-4 h-100">
-            <div class="card-body text-center">
-              <div class="small text-black">Istanbul, TR</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-3 mb-md-0">
-          <div class="card py-4 h-100">
-            <div class="card-body text-center">
-              <div class="small text-black">furkankilicaslan (at) gmail.com</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-3 mb-md-0">
-          <div class="card py-4 h-100">
-            <div class="card-body text-center">
-              <div class="small text-black">+90 (999) 999-9999</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="social d-flex justify-content-center">
-        <a href="https://www.instagram.com/furkan_klcsln/" class="mx-2" target="_blank">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://github.com/Klcsln" class="mx-2" target="_blank">
-          <i class="fab fa-github"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/klcsln/" class="mx-2" target="_blank">
-          <i class="fab fa-linkedin-in"></i>
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-black small text-center text-white-50">
-    <div class="container">
-      Copyright &copy; Furkan Kilicaslan 2023
-    </div>
-  </footer>
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for this template -->
-  <script src="js/grayscale.min.js"></script>
-
+    window.addEventListener('scroll', setActive, { passive: true });
+    setActive();
+  </script>
 </body>
-
 </html>
